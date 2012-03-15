@@ -28,9 +28,17 @@ This gem does not add any functionality by default. To activate it create a befo
 
     before_filter :ensure_params_are_accessible, :only => [:create, :update]
 
-Now let's expose the most common rails parameters: controller, action, format, and id
+Now let's expose the parameters that are common across our application:
 
-    param_accessible :controller, :action, :format, :id
+    param_accessible :page, :sort
+
+You may want to allow all base-level parameters since most Rails controllers only send nested parameters to models (i.e. params[:user]):
+
+    # allow all base parameters (// is a regex that matches all strings)
+    param_accessible //
+    
+    # allow any base parameter starting with "my_"
+    param_accessible /^my_/
 
 We also want to make sure only admins can change a user's "is_admin" and "is_active" attributes:
 
@@ -40,15 +48,15 @@ Rinse and repeat for all your controllers and you're Rails Application will be m
 
 ## Example
 
-Making create and update actions secure by default for all your application's controllers, exposing common parameters, and providing a readable error message to the user when there is a problem.
+Placing the before_filter in our ApplicationController makes all our create and update actions secure by default. We also expose application-wide parameters and provide a friendly error message when an invalid parameter is provided.
 
     class ApplicationController < ActionController::Base
       
       # make all your controllers secure by default
       before_filter :ensure_params_are_accessible, :only => [:create, :update]
       
-      # expose the common rails parameters
-      param_accessible :controller, :action, :format, :id
+      # expose the your common application parameters
+      param_accessible :page, :sort
       
       # this error is thrown when the user submits an inaccessible param
       rescue_from ParamAccessible::Error, :with => :handle_param_not_accessible
