@@ -50,13 +50,13 @@ Making create and update actions secure by default for all your application's co
       # expose the common rails parameters
       param_accessible :controller, :action, :format, :id
       
-      # this error is thrown when the user tries to access an inaccessible param
+      # this error is thrown when the user submits an inaccessible param
       rescue_from ParamAccessible::Error, :with => :handle_param_not_accessible
       
       protected
       
       def handle_param_not_accessible e
-        flash[:error] = "You gave me some invalid parameters: #{e.inaccessible_params.join(', )}"
+        flash[:error] = "You gave me some invalid parameters: #{e.inaccessible_params.join(', ')}"
         redirect_to :back
       end
       
@@ -64,7 +64,7 @@ Making create and update actions secure by default for all your application's co
 
 Inheriting from the class above, we now need to specify our accessible parameters for the create and update actions.
 
-    class UserController < ApplicationController
+    class UsersController < ApplicationController
       
       # these attributes are available for everyone
       param_accessible :user => [:name, :email, :password, :password_confirmation]
