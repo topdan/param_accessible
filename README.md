@@ -115,7 +115,15 @@ Using Rails' skip_before_filter to make a controller insecure again
       skip_before_filter :ensure_params_are_accessible
       
     end
-    
+
+## TODO
+
+* Mark a parameter that expects an array as its value:
+  * param_accessible :user => ["group_ids[]"]
+    * would accept [10,12] or {"0" => 10, "1" => 12}
+  * param_accessible :user => {"groups[]" => [:name]}
+    * would accept [{:name => "Admins"}, {:name => "Users"}]
+
 ## Contributing
 
 1. Fork it
