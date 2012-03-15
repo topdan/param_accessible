@@ -2,8 +2,6 @@ class ApplicationController < ActionController::Base
   before_filter :ensure_params_are_accessible, :only => [:create, :update]
   before_filter :render_nothing
   
-  param_accessible :action, :controller, :format
-  
   def index
   end
   

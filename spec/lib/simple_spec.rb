@@ -8,6 +8,11 @@ describe SimpleController do
     response.code.should == "200"
   end
   
+  it "should not complain about common rails parameters" do
+    post :update, :format => "json", :id => "foo"
+    response.code.should == "200"
+  end
+  
   it "should not complain if a subset of those attributes are given" do
     post :create, :foo => 'hi'
     response.code.should == "200"

@@ -30,7 +30,8 @@ module ParamAccessible
         if superclass.respond_to?(:param_accessible_rules)
           @param_accessible_rules = Rules.new superclass.param_accessible_rules
         else
-          @param_accessible_rules = Rules.new
+          common_rails_parameters_rule = Rule.new :controller, :action, :id, :format
+          @param_accessible_rules = Rules.new [common_rails_parameters_rule]
         end
       end
       
