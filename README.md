@@ -24,19 +24,19 @@ Or install it yourself as:
 
 ## Usage
 
-1. This gem does not add any functionality by default. To activate it create a before_filter in any ActionController::Base subclass. We only use the filter for create and update actions because those are the normally only the only harmful ones:
+This gem does not add any functionality by default. To activate it create a before_filter in any ActionController::Base subclass. We only use the filter for create and update actions because those are the normally only the only harmful ones:
 
     before_filter :ensure_params_are_accessible, :only => [:create, :update]
 
-2. Now let's expose the most common rails parameters: controller, action, format, and id
+Now let's expose the most common rails parameters: controller, action, format, and id
 
     param_accessible :controller, :action, :format, :id
 
-3. We also want to make sure only admins can change a user's "is_admin" and "is_active" attributes:
+We also want to make sure only admins can change a user's "is_admin" and "is_active" attributes:
 
     param_accessible :user => [:is_admin, :is_active], :if => :is_admin?
 
-4. Rinse and repeat for all your controllers and you're Rails Application will be much safer.
+Rinse and repeat for all your controllers and you're Rails Application will be much safer.
 
 ## Example
 
