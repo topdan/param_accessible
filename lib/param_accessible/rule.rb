@@ -40,12 +40,12 @@ module ParamAccessible
       return if @only_options != nil && !@only_options.include?(controller.action_name)
       return if @except_options != nil && @except_options.include?(controller.action_name)
       
-      accessible_hash_for controller, @attributes, dest
+      accessible_hash_for controller.params, @attributes, dest
     end
     
     protected
     
-    def accessible_hash_for controller, attributes, dest
+    def accessible_hash_for params, attributes, dest
       attributes.each do |key, value|
         if value.is_a?(Hash)
           attrs = dest[key]
@@ -54,11 +54,26 @@ module ParamAccessible
             dest[key] = attrs
           end
           
-          accessible_hash_for controller, value, attrs
-        else
+          nested_params = params[key] if params.is_a?(Hash)
+          accessible_hash_for nested_params, value, attrs
+          
+        elsif key.is_a?(String)
           dest[key] = value
+          
+        elsif key.is_a?(Regexp) && params
+          accessible_params_for_regex key, params, dest
         end
       end
+    end
+    
+    def accessible_params_for_regex regex, params, dest
+      params.keys.each do |key|
+        if key.to_s =~ regex
+          dest[key] = nil
+        end
+      end
+      
+      dest
     end
     
     # When specifying params to protect, we allow a combination of arrays and hashes much like how
@@ -85,7 +100,11 @@ module ParamAccessible
     end
 
     def normalize_key(k)
-      k.to_s
+      if k.is_a?(Regexp)
+        k
+      else
+        k.to_s
+      end
     end
 
   end
