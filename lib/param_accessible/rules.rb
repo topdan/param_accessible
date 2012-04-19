@@ -33,10 +33,9 @@ module ParamAccessible
           detect_inaccessible_hash value, nested, errors, prefix_for(prefix, key)
           
         elsif value.is_a?(Array)
-          nested = accessible[key] || {}
-          value.each do |v|
+          value.each_with_index do |v, i|
             if v.is_a?(Hash)
-              detect_inaccessible_hash v, nested, errors, prefix_for(prefix, key)
+              detect_inaccessible_hash v, accessible[key][i], errors, prefix_for(prefix_for(prefix, key), "")
             end
           end
         end

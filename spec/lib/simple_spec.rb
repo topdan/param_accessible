@@ -45,12 +45,7 @@ describe SimpleController do
       e.inaccessible_params.should == %w(bar[unknown])
     end
   end
-  
-  it "should handle nested arrays" do
-    post :create, :bar => [:baz => 'hi']
-    response.code.should == '200'
-  end
-  
+
   it "should be fine when the ONLY value is a value but not an options hash" do
     SimpleController.param_accessible :bar => []
   end
