@@ -47,7 +47,9 @@ module ParamAccessible
     
     def accessible_hash_for params, attributes, dest
       attributes.each do |key, value|
-        if value.is_a?(Hash)
+        if key.to_s =~ /\[\]$/
+          accessible_array_for key, params, value, dest
+        elsif value.is_a?(Hash)
           attrs = dest[key]
           if attrs.nil?
             attrs = {}
@@ -75,7 +77,30 @@ module ParamAccessible
       
       dest
     end
-    
+
+    def accessible_array_for key, params, value, dest
+      key = key.to_s.chomp('[]')
+
+      if params and params[key].is_a? Hash
+        params[key].each do |index, nested_params|
+          dest[key] ||= {}
+          attrs = dest[key][index] = {}
+          accessible_hash_for nested_params, value, attrs if value
+        end
+      elsif params and params[key].is_a? Array
+        params[key].each do |nested_params|
+          if nested_params.is_a? Hash
+            dest[key] ||= []
+            attrs = {}
+            accessible_hash_for nested_params, value, attrs if value
+            dest[key].push(attrs)
+          else
+            dest[key] = nil
+          end
+        end
+      end
+    end
+
     # When specifying params to protect, we allow a combination of arrays and hashes much like how
     # ActiveRecord::Base#find's :include options works.  This method normalizes that into just nested hashes,
     # stringifying the keys and setting all values to nil.  This format is easier/faster to work with when

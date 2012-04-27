@@ -116,13 +116,14 @@ Using Rails' skip_before_filter to make a controller insecure again
       
     end
 
-## TODO
+## Nested attributes
 
-* Mark a parameter that expects an array as its value:
-  * param_accessible :user => ["group_ids[]"]
-    * would accept [10,12] or {"0" => 10, "1" => 12}
-  * param_accessible :user => {"groups[]" => [:name]}
-    * would accept [{:name => "Admins"}, {:name => "Users"}]
+Arrays of attributes like the ones used with Rails' nested forms feature can be specified using
+the following syntax:
+
+    class DemoController < ApplicationController
+      param_accessible :"foo[]" => [:bar, :baz]
+    end
 
 ## Contributing
 
