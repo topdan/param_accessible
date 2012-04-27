@@ -1,3 +1,9 @@
+# Important Note
+
+Soon after I created this project, @dhh (creator of Rails) made his own parameter protection gem public: https://github.com/rails/strong_parameters
+
+DHH's strong_parameters gem will be integrated into rails4, so I suggest you use it instead.
+
 # ParamAccessible
 
 [![Build Status](https://secure.travis-ci.org/topdan/param_accessible.png)](https://secure.travis-ci.org/topdan/param_accessible.png)
